@@ -4,6 +4,7 @@ import Html exposing (Html, div, p, text)
 import Html.Attributes exposing (class, style)
 import Model.Date as Date exposing (Date, Month)
 import Model.Util exposing (chainCompare)
+import Maybe exposing (withDefault, map)
 
 
 type Interval
@@ -96,11 +97,27 @@ If the `start` field is equal, the they are compare by the `end` fields:
 -}
 compare : Interval -> Interval -> Order
 compare (Interval intA) (Interval intB) =
-    EQ
-    -- Debug.todo "Implement Model.Interval.compare"
+    let
+        compareStart = Date.compare intA.start intB.start
+
+        compareEnd = 
+            case (length (Interval intA), length (Interval intB)) of
+            (Just (aY, aM), Just (bY, bM)) -> Basics.compare (aY * 12 + aM) (bY * 12 + bM)
+            (Nothing, Nothing) -> EQ
+            (_, Nothing) -> LT
+            (Nothing, _) -> GT
+    in
+        chainCompare compareEnd compareStart
 
 
 view : Interval -> Html msg
 view interval =
-    div [] []
-    -- Debug.todo "Implement Model.Interval.view"
+    let
+        (Interval i) = interval
+    in
+        div [class "interval"] 
+        ([ p [class "interval-start"] [Date.view i.start]
+        ,  p [class "interval-end"] [i.end |> map Date.view |> withDefault (text "Present")]
+        ] ++ (length interval 
+                |> map (\(x,y) -> [p[class "interval-length"][text <| String.fromInt x ++ "years" ++ String.fromInt y ++ "months"]]) 
+                |> withDefault []))
