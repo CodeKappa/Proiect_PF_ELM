@@ -29,11 +29,17 @@ main =
         , subscriptions = subscriptions
         }
 
+getRepo : Cmd Msg
+getRepo = Http.get 
+    { url = "https://api.github.com/users/octocat/repos"
+    , expect = Http.expectJson GotRepos (De.list Repo.decodeRepo) 
+    }
+
 
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( initModel
-    , Cmd.none
+    , getRepo
     )
 
 
@@ -46,10 +52,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GetRepos ->
-            ( model, Cmd.none )
+            ( model, getRepo )
 
         GotRepos res ->
-            ( model, Cmd.none )
+            case res of
+                Ok r -> ( {model | repos = r}, Cmd.none )
+                Err _-> ( {model | repos = []}, Cmd.none )
 
         SelectEventCategory category ->
             ( model, Cmd.none )

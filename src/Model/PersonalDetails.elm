@@ -2,7 +2,7 @@ module Model.PersonalDetails exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, classList, id, href, style)
-
+import Model.Util exposing (divStyle, pStyle)
 
 type alias DetailWithName =
     { name : String
@@ -17,13 +17,11 @@ type alias PersonalDetails =
     , socials : List DetailWithName
     }
 
-dataStyle = [style "border" "solid 1px", style "margin" "2px"]
-
 view : PersonalDetails -> Html msg
 view details =
     div [] 
-    [ h1 [id "name"] [text <| "Nume: " ++ details.name]
-    , em [id "intro"] [text <| "Intro: " ++ details.intro]
-    , div dataStyle <| List.map (\{name, detail} -> p [class "contact-detail"] [text <| name ++ ": " ++ detail]) details.contacts
-    , div dataStyle <| List.map (\{name, detail} -> p [class "social-link"] [a [href detail] [text name]]) details.socials
+    [ h1 [id "name", style "margin" "5px"] [text <| "Nume: " ++ details.name]
+    , p [style "margin" "5px"] [em [id "intro"] [text <| "Intro: " ++ details.intro]]
+    , div divStyle <| List.map (\{name, detail} -> p [class "contact-detail"] [text <| name ++ ": " ++ detail]) details.contacts
+    , div divStyle <| List.map (\{name, detail} -> p [class "social-link"] [a [href detail] [text name]]) details.socials
     ]
