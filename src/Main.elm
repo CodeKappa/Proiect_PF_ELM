@@ -60,10 +60,14 @@ update msg model =
                 Err _-> ( {model | repos = []}, Cmd.none )
 
         SelectEventCategory category ->
-            ( model, Cmd.none )
+            ( {model | selectedEventCategories = 
+                        EventCategory.set category True model.selectedEventCategories}
+            , Cmd.none )
 
         DeselectEventCategory category ->
-            ( model, Cmd.none )
+            ( {model | selectedEventCategories = 
+                        EventCategory.set category False model.selectedEventCategories}
+            , Cmd.none )
 
 
 eventCategoryToMsg : ( EventCategory.EventCategory, Bool ) -> Msg

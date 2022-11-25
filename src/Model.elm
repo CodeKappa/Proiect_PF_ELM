@@ -90,10 +90,10 @@ projectEvens =
 
 personalDetails : PersonalDetails
 personalDetails =
-    { name = "John Doe"
+    { name = "Kovacs Paul"
     , intro = "I like computers"
-    , contacts = [ DetailWithName "email" "john@domain.com" ]
-    , socials = [ DetailWithName "github" "https://github.com/octocat" ]
+    , contacts = [ DetailWithName "email" "kovacs_paul_adrian@yahoo.com" ]
+    , socials = [ DetailWithName "github" "https://github.com/CodeKappa" ]
     }
 
 

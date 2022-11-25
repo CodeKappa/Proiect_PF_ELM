@@ -5,6 +5,7 @@ import Html.Attributes exposing (class, style)
 import Model.Date as Date exposing (Date, Month)
 import Model.Util exposing (chainCompare)
 import Maybe exposing (withDefault, map)
+import Model.Util exposing (pStyle, divStyle)
 
 
 type Interval
@@ -114,10 +115,14 @@ view : Interval -> Html msg
 view interval =
     let
         (Interval i) = interval
+        inlineStyleP = pStyle ++ [style "display" "inline"]
     in
-        div [class "interval"] 
-        ([ p [class "interval-start"] [Date.view i.start]
-        ,  p [class "interval-end"] [i.end |> map Date.view |> withDefault (text "Present")]
+        div (divStyle ++ [class "interval"]) 
+        ([ p (inlineStyleP ++ [class "interval-start"]) 
+             [Date.view i.start, text "-"]
+        ,  p (inlineStyleP ++ [class "interval-end"]) 
+             [i.end |> map Date.view |> withDefault (text "Present")]
         ] ++ (length interval 
-                |> map (\(x,y) -> [p[class "interval-length"][text <| String.fromInt x ++ "years" ++ String.fromInt y ++ "months"]]) 
+                |> map (\(x,y) -> [p (pStyle ++ [class "interval-length"])
+                                     [text <| String.fromInt x ++ " years and " ++ String.fromInt y ++ " months"]]) 
                 |> withDefault []))
