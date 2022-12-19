@@ -31,7 +31,7 @@ main =
 
 getRepo : Cmd Msg
 getRepo = Http.get 
-    { url = "https://api.github.com/users/octocat/repos"
+    { url = "https://api.github.com/users/codekappa/repos"
     , expect = Http.expectJson GotRepos (De.list Repo.decodeRepo) 
     }
 
